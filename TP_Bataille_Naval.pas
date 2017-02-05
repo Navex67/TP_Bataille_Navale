@@ -3,143 +3,171 @@
 //ENTREE : les cellules pour faire le cadre du jeu, les bateaux
 //SORTIE : le jeu apres traitement des données
 
+
 CONST
-
-	TMAX=5 //taille max des bateaux
-	MAX=10
+	MAX=10		//taille de la map
+	MAXNAVIRE=5		//nombre de navire MAX=8
+	MAXTAILLENAVIRE=6		//taille des navires MAX=10
+	
+//DEBUT TYPE
 TYPE
-	cases = ENREGISTREMENT
-
-		ligne : ENTIER
-		colonne : ENTIER
-
-FINENREGISTREMENT
-
-		
-
+	cellule = ENREGISTREMENT
+		ligne:ENTIER
+		colonne:ENTIER
+	FINENREGISTREMENT
+	
 TYPE
-	bateaux = ENREGISTREMENT
-
-		TabBateau = Tableau [1..TMAX] de cases
-
-		
-
-FINENREGISTREMENT
-		
-
+	navire = ENREGISTREMENT
+		n : cellule
+		taille: ENTIER
+		nom: CHAINE
+	FINENREGISTREMENT
+	
 TYPE
 	flotte = ENREGISTREMENT
+		n1 : navire
+	FINENREGISTREMENT
+	
 
-		Tabflotte = Array [1..TMAX]de bateaux
+TYPE
+	Tcellule=TABLEAU [1..100] DE cellule
+	Tbateau=TABLEAU [1..100] DE navire
+	TFlotte=TABLEAU [1..MAXNAVIRE,1..100] of flotte
 
 
-FINENREGISTREMENT
 
-procedure CreateCell(var ligne,colonne:entier)
 
-	VAR
-		i,j:ENTIER
-
-	DEBUT
-		POUR i de 1 a MAX FAIRE
-		DEBUT
-			POUR j de 1 a MAX FAIRE
-			DEBUT
-				ligne <- 0
-				colonne <- 0
-				ECRIRE ligne & colonne
-			FINPOUR
-		FINPOUR
+	//init tableau
+//BUT:Initialisation a 0 des position des cellules
+//ENTREE:1 tableau d'entier, 1 entier, 1 constante
+//SORTIE:1 tableau d'entier avec valeur 0
+PROCEDURE InitCellule(VAR PosCellule,CelluleTouche:Tcellule)
+VAR
+	i:ENTIER
+DEBUT
+	POUR i DE 1 A MAX FAIRE
+		PosCellule[i].colonne<-0
+		PosCellule[i].ligne<-0
+		CelluleTouche[i].colonne<-0
+		CelluleTouche[i].ligne<-0
+	FINPOUR
 FINPROCEDURE
+//
 
 
+//BUT:Initialisation a 0 de la flotte
+//ENTREE:2 tableau avec 1 sous type Tflotte, et 1 sous type Tbateau
+//SORTIE:2 tableau avec valeur 0
+PROCEDURE InitFlotte(VAR Bateau:Tbateau; VAR Ensemble:TFlotte)
 VAR
 	i,j:ENTIER
-
 DEBUT
-	CreateCell(i,j)
-FIN
+	POUR i DE 1 A MAX FAIRE
+		Bateau[i].n.colonne<-0
+		Bateau[i].n.ligne<-0
+		POUR j DE 1 A MAXNAVIRE FAIRE
+			Ensemble[j,i].n1.n.colonne<-0
+			Ensemble[j,i].n1.n.ligne<-0
+		FINPOUR
+	FINPOUR
+FINPROCEDURE
 
+	//fin init	}
 
-}
 
 program TP_Bataille_Naval;
 
 uses crt;
+//BUT:Bataille Navale
+//ENTREE:2 entier
+//SORTIE:Bateau
 
 CONST
-	TMAX=5;
-	MAX=10;
-
+	MAX=10;		//taille de la map
+	MAXNAVIRE=5;		//nombre max de navire possible
+	MAXTAILLENAVIRE=6;		//taille max d'un navire
+	
+//DEBUT TYPE
 TYPE
-
 	cellule = record
-
-		ligne : integer;
-		colonne : integer;
-
-END;
-
-		
+		ligne:integer;
+		colonne:integer;
+	END;
+	
 TYPE
-	bateaux = record
-
-		TabBateau : Array [1..TMAX]of cellule;
-
-END;
-		
-
+	navire = record
+		n : cellule;
+		taille: integer;
+	END;
+	
 TYPE
 	flotte = record
+		n1 : navire
+	END;
+	
 
-		Tabflotte : Array [1..TMAX]of bateaux;
+TYPE
+	Tcellule=ARRAY [1..100] OF cellule;
+	Tbateau=ARRAY [1..100] OF navire;
+	TFlotte=ARRAY [1..MAXNAVIRE,1..100] OF flotte;
+//FIN TYPE
 
-END;
 
-
-procedure CreateCell(var ligne,colonne:integer);
-
+	//init tableau
+//BUT:Initialisation a 0 des position des cellules
+//ENTREE:1 tableau d'entier, 1 entier, 1 constante
+//SORTIE:1 tableau d'entier avec valeur 0
+PROCEDURE InitCellule(VAR PosCellule,CelluleTouche:Tcellule);
 VAR
-	i,j:integer;
+	i:integer;
 
-//initialisation des cellules de 0 qui represente l'eau
+BEGIN
+	FOR i := 1 TO MAX DO;
 	BEGIN
-		FOR i:= 1 TO MAX DO
-			BEGIN
-				FOR j:= 1 TO MAX DO
-					BEGIN
-					ligne:=0;
-					colonne:=0;
-					write(ligne,colonne);
-					END;
-				writeln;
-			END;
-
+		PosCellule[i].colonne:=0;
+		PosCellule[i].ligne:=0;
+		CelluleTouche[i].colonne:=0;
+		CelluleTouche[i].ligne:=0;
+	END;
 END;
-
-function Comparaison(var ligne,colonne:integer):boolean;
-
-var
-	ok:boolean;
-
-BEGIN
-		IF (ligne=0) AND (colonne=0) THEN
-			ok:=false
-		ELSE
-			ok:=true;
-		Comparaison:=ok;
-END;
+//
 
 
-
-
-
+//BUT:Initialisation a 0 de la flotte
+//ENTREE:2 tableau avec 1 sous type Tflotte, et 1 sous type Tbateau
+//SORTIE:2 tableau avec valeur 0
+PROCEDURE InitFlotte(VAR Bateau:Tbateau; VAR Ensemble:TFlotte);
 VAR
 	i,j:integer;
-	ok:boolean;
+BEGIN
+	FOR i := 1 TO MAX DO
+	BEGIN
+		Bateau[i].n.colonne:=0;
+		Bateau[i].n.ligne:=0;
+		FOR j := 1 TO MAXNAVIRE DO
+		BEGIN
+			Ensemble[j,i].n1.n.colonne:=0;
+			Ensemble[j,i].n1.n.ligne:=0;
+		END;
+	END;
+END;
+//
+	//fin init	
+
+
+
+//Debut programme principal
+VAR
+	
+	PosCellule,CelluleTouche:Tcellule;
+	Bateau:Tbateau;
+	Ensemble:TFlotte;
+
 
 BEGIN
-	CreateCell(i,j);
-	readln;
+
+	InitCellule(PosCellule,CelluleTouche);		// Init des cellules
+	InitFlotte(Bateau,Ensemble);		//Init de la flotte
+
 END.
 
