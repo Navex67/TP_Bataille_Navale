@@ -72,7 +72,24 @@ DEBUT
 	FINPOUR
 FINPROCEDURE
 
-	//fin init	}
+//programme principal
+VAR
+	
+	PosCellule,CelluleTouche:Tcellule
+	Bateau:Tbateau
+	Ensemble:TFlotte
+
+
+DEBUT
+
+	InitCellule(PosCellule,CelluleTouche)		// Init des cellules
+	InitFlotte(Bateau,Ensemble)		//Init de la flotte
+	
+
+FIN }
+
+
+	
 
 
 program TP_Bataille_Naval;
@@ -113,7 +130,7 @@ TYPE
 //FIN TYPE
 
 
-	//init tableau
+
 //BUT:Initialisation a 0 des position des cellules
 //ENTREE:1 tableau d'entier, 1 entier, 1 constante
 //SORTIE:1 tableau d'entier avec valeur 0
@@ -130,7 +147,7 @@ BEGIN
 		CelluleTouche[i].ligne:=0;
 	END;
 END;
-//
+
 
 
 //BUT:Initialisation a 0 de la flotte
@@ -151,12 +168,11 @@ BEGIN
 		END;
 	END;
 END;
-//
-	//fin init	
 
 
 
-//Debut programme principal
+
+//programme principal
 VAR
 	
 	PosCellule,CelluleTouche:Tcellule;
@@ -168,6 +184,12 @@ BEGIN
 
 	InitCellule(PosCellule,CelluleTouche);		// Init des cellules
 	InitFlotte(Bateau,Ensemble);		//Init de la flotte
+	readln;
 
 END.
+
+
+
+
+
 
